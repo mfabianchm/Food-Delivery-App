@@ -33,5 +33,9 @@ public class FoodOrder {
     @Column(name = "cust_restaurant_rating", nullable = false)
     private BigDecimal custRestaurantRating;
 
+    @ManyToOne
+    @JoinColumn(name = "order_status_id", nullable = false)
+    private OrderStatus orderStatus;
+
 
 }
