@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.App.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ public class MenuItem {
 
     @Column(nullable = false)
     @NotNull
+    @DecimalMin(value = "0.00", inclusive = false, message = "Price must be greater than zero")
     private BigDecimal price;
 
     @ManyToOne
