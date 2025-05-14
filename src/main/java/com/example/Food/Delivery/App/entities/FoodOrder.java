@@ -45,6 +45,7 @@ public class FoodOrder {
 
     @ManyToOne
     @JoinColumn(name = "delivery_driver_id", nullable = false)
+    @JsonBackReference
     private DeliveryDriver deliveryDriver;
 
     @ManyToOne

@@ -44,7 +44,7 @@ public class User {
     @Column(nullable = false)
     private Boolean active = true;
 
-    @Pattern(regexp = "^\\+?[0-9]{10}$")
+    @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Invalid phone number format")
     private String phoneNumber;
 
     @Min(1)
