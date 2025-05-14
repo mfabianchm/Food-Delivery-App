@@ -59,7 +59,6 @@ public class OrderStatus {
         return "OrderStatus{" +
                 "id=" + id +
                 ", statusType=" + statusType +
-                ", foodOrders=" + foodOrders +
                 '}';
     }
 }
