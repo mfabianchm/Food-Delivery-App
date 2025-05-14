@@ -1,4 +1,5 @@
 package com.example.Food.Delivery.App.entities;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.CreationTimestamp;
 
 
@@ -35,6 +36,7 @@ public class FoodOrder {
 
     @ManyToOne
     @JoinColumn(name = "order_status_id", nullable = false)
+    @JsonBackReference
     private OrderStatus orderStatus;
 
     @ManyToOne
