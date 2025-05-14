@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "food_order")
+@Table(name = "food_orders")
 public class FoodOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,5 +37,20 @@ public class FoodOrder {
     @JoinColumn(name = "order_status_id", nullable = false)
     private OrderStatus orderStatus;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "delivery_driver_id", nullable = false)
+    private DeliveryDriver deliveryDriver;
+
+    @ManyToOne
+    @JoinColumn(name = "user_address_id", nullable = false)
+    private UserAddress userAddress;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
 
 }
