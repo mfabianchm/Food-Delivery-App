@@ -19,7 +19,6 @@ public class OrderStatus {
     private OrderStatusType statusType;
 
     @OneToMany(mappedBy = "orderStatus")
-    @JsonManagedReference
     private List<FoodOrder> foodOrders;
 
     public OrderStatusType getStatusType() {

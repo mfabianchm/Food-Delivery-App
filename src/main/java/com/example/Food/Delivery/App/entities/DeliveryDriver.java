@@ -39,7 +39,6 @@ public class DeliveryDriver {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "deliveryDriver")
-    @JsonManagedReference
     private List<FoodOrder> foodOrders;
 
     public DeliveryDriver() {}

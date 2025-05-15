@@ -33,6 +33,11 @@ public class User {
     @NotNull
     @NotBlank
     @Column(nullable = false)
+    private String username;
+
+    @NotNull
+    @NotBlank
+    @Column(nullable = false)
     private String password;
 
     @NotNull
@@ -61,9 +66,10 @@ public class User {
 
     public User() {}
 
-    public User(String fullName, String email, String password, UserRole role) {
+    public User(String fullName, String email, String username, String password, UserRole role) {
         this.fullName = fullName;
         this.email = email;
+        this.username = username;
         this.password = password;
         this.role = role;
         this.active = true;
@@ -77,6 +83,10 @@ public class User {
 
     public String getFullName() {
         return fullName;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getEmail() {
@@ -120,6 +130,10 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setPassword(String password) {
