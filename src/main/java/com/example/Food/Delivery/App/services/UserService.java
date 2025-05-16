@@ -1,6 +1,6 @@
 package com.example.Food.Delivery.App.services;
 
-import com.example.Food.Delivery.App.UserRepository.UserRepository;
+import com.example.Food.Delivery.App.repositories.UserRepository;
 import com.example.Food.Delivery.App.dtos.RegisterRequestDto;
 import com.example.Food.Delivery.App.entities.User;
 import com.example.Food.Delivery.App.enums.UserRole;
