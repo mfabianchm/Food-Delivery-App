@@ -1,7 +1,7 @@
 package com.example.Food.Delivery.App.controllers;
 
-import com.example.Food.Delivery.App.dtos.RestaurantRequestDto;
-import com.example.Food.Delivery.App.dtos.RestaurantResponseDto;
+import com.example.Food.Delivery.App.dtos.Restaurant.RestaurantRequestDto;
+import com.example.Food.Delivery.App.dtos.Restaurant.RestaurantResponseDto;
 import com.example.Food.Delivery.App.services.RestaurantService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

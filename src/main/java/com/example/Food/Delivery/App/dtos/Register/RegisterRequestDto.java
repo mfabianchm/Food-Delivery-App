@@ -1,4 +1,4 @@
-package com.example.Food.Delivery.App.dtos;
+package com.example.Food.Delivery.App.dtos.Register;
 
 import com.example.Food.Delivery.App.enums.UserRole;
 import jakarta.validation.constraints.*;

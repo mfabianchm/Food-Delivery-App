@@ -1,5 +1,6 @@
-package com.example.Food.Delivery.App.dtos;
+package com.example.Food.Delivery.App.dtos.Restaurant;
 
+import com.example.Food.Delivery.App.dtos.Address.AddressRequestDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,9 +1,9 @@
 package com.example.Food.Delivery.App.services;
 
-import com.example.Food.Delivery.App.dtos.AddressRequestDto;
-import com.example.Food.Delivery.App.dtos.AddressResponseDto;
-import com.example.Food.Delivery.App.dtos.RestaurantRequestDto;
-import com.example.Food.Delivery.App.dtos.RestaurantResponseDto;
+import com.example.Food.Delivery.App.dtos.Address.AddressRequestDto;
+import com.example.Food.Delivery.App.dtos.Address.AddressResponseDto;
+import com.example.Food.Delivery.App.dtos.Restaurant.RestaurantRequestDto;
+import com.example.Food.Delivery.App.dtos.Restaurant.RestaurantResponseDto;
 import com.example.Food.Delivery.App.entities.Address;
 import com.example.Food.Delivery.App.entities.Country;
 import com.example.Food.Delivery.App.entities.Restaurant;

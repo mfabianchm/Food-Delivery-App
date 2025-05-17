@@ -14,50 +14,37 @@ public class OrderStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
-    private OrderStatusType statusType;
+    private String statusName;
 
-    @OneToMany(mappedBy = "orderStatus")
+    @OneToMany(mappedBy = "orderStatus", fetch = FetchType.LAZY)
     private List<FoodOrder> foodOrders;
 
-    public OrderStatusType getStatusType() {
-        return statusType;
-    }
+    public OrderStatus() {}
 
-    public List<FoodOrder> getFoodOrders() {
-        return foodOrders;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setStatusType(OrderStatusType statusType) {
-        this.statusType = statusType;
-    }
-
-    public void setFoodOrders(List<FoodOrder> foodOrders) {
-        this.foodOrders = foodOrders;
+    public OrderStatus(String statusName) {
+        this.statusName = statusName;
     }
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderStatus that = (OrderStatus) o;
-        return Objects.equals(id, that.id) && statusType == that.statusType && Objects.equals(foodOrders, that.foodOrders);
+        return Objects.equals(id, that.id) && Objects.equals(statusName, that.statusName) && Objects.equals(foodOrders, that.foodOrders);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, statusType, foodOrders);
+        return Objects.hash(id, statusName, foodOrders);
     }
 
     @Override
     public String toString() {
         return "OrderStatus{" +
                 "id=" + id +
-                ", statusType=" + statusType +
+                ", statusName='" + statusName + '\'' +
+                ", foodOrders=" + foodOrders +
                 '}';
     }
 }

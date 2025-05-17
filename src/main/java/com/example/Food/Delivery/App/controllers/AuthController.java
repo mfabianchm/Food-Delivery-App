@@ -1,8 +1,8 @@
 package com.example.Food.Delivery.App.controllers;
 
-import com.example.Food.Delivery.App.dtos.AuthenticationRequestDto;
-import com.example.Food.Delivery.App.dtos.AuthenticationResponse;
-import com.example.Food.Delivery.App.dtos.RegisterRequestDto;
+import com.example.Food.Delivery.App.dtos.Authentication.AuthenticationRequestDto;
+import com.example.Food.Delivery.App.dtos.Authentication.AuthenticationResponse;
+import com.example.Food.Delivery.App.dtos.Register.RegisterRequestDto;
 import com.example.Food.Delivery.App.entities.User;
 import com.example.Food.Delivery.App.services.AuthenticationService;
 import com.example.Food.Delivery.App.services.UserService;

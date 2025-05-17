@@ -1,4 +1,4 @@
-package com.example.Food.Delivery.App.dtos;
+package com.example.Food.Delivery.App.dtos.Country;
 
 import jakarta.validation.constraints.NotBlank;
 

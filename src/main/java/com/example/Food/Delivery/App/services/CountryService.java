@@ -1,6 +1,6 @@
 package com.example.Food.Delivery.App.services;
 
-import com.example.Food.Delivery.App.dtos.CountryDto;
+import com.example.Food.Delivery.App.dtos.Country.CountryDto;
 import com.example.Food.Delivery.App.entities.Country;
 import com.example.Food.Delivery.App.repositories.CountryRepository;
 import org.springframework.stereotype.Service;

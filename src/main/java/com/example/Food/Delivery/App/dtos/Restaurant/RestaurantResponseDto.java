@@ -1,4 +1,6 @@
-package com.example.Food.Delivery.App.dtos;
+package com.example.Food.Delivery.App.dtos.Restaurant;
+
+import com.example.Food.Delivery.App.dtos.Address.AddressResponseDto;
 
 public class RestaurantResponseDto {
     private Long id;

@@ -1,6 +1,6 @@
 package com.example.Food.Delivery.App.controllers;
 
-import com.example.Food.Delivery.App.dtos.CountryDto;
+import com.example.Food.Delivery.App.dtos.Country.CountryDto;
 import com.example.Food.Delivery.App.entities.Country;
 import com.example.Food.Delivery.App.services.CountryService;
 import jakarta.validation.Valid;
