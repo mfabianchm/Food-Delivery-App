@@ -1,6 +1,6 @@
 package com.example.Food.Delivery.App.dtos;
 
-public class AddressDto {
+public class AddressRequestDto {
     private Long id;
     private String street;
     private String houseNumber;
@@ -8,13 +8,13 @@ public class AddressDto {
     private String city;
     private String state;
     private String zipCode;
-    private String countryName;
+    private Long countryId;
 
-    public AddressDto() {
+    public AddressRequestDto() {
     }
 
-    public AddressDto(Long id, String street, String houseNumber, String apartmentNumber,
-                      String city, String state, String zipCode, String countryName) {
+    public AddressRequestDto(Long id, String street, String houseNumber, String apartmentNumber,
+                             String city, String state, String zipCode, Long countryId) {
         this.id = id;
         this.street = street;
         this.houseNumber = houseNumber;
@@ -22,7 +22,7 @@ public class AddressDto {
         this.city = city;
         this.state = state;
         this.zipCode = zipCode;
-        this.countryName = countryName;
+        this.countryId = countryId;
     }
 
 
@@ -47,6 +47,6 @@ public class AddressDto {
     public String getZipCode() { return zipCode; }
     public void setZipCode(String zipCode) { this.zipCode = zipCode; }
 
-    public String getCountryName() { return countryName; }
-    public void setCountryName(String countryName) { this.countryName = countryName; }
+    public Long getCountryId() { return countryId; }
+    public void setCountryId(Long countryId) { this.countryId = countryId; }
 }

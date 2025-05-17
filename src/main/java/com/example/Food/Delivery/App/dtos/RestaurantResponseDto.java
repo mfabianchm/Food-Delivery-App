@@ -3,12 +3,12 @@ package com.example.Food.Delivery.App.dtos;
 public class RestaurantResponseDto {
     private Long id;
     private String name;
-    private AddressDto address;
+    private AddressResponseDto address;
 
     public RestaurantResponseDto() {
     }
 
-    public RestaurantResponseDto(Long id, String name, AddressDto address) {
+    public RestaurantResponseDto(Long id, String name, AddressResponseDto address) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -30,11 +30,11 @@ public class RestaurantResponseDto {
         this.name = name;
     }
 
-    public AddressDto getAddress() {
+    public AddressResponseDto  getAddress() {
         return address;
     }
 
-    public void setAddress(AddressDto address) {
+    public void setAddress(AddressResponseDto address) {
         this.address = address;
     }
 }
