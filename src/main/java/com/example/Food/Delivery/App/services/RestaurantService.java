@@ -52,6 +52,42 @@ public class RestaurantService {
         return mapToRestaurantResponseDto(restaurant);
     }
 
+    public RestaurantResponseDto updateRestaurant(Long id, RestaurantRequestDto dto) {
+        // 1. Find the restaurant
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Restaurant not found with id " + id));
+
+        // 2. Update name
+        restaurant.setName(dto.getName());
+
+        // 3. Update Address
+        Address address = restaurant.getAddress(); // Get existing address
+        AddressRequestDto addressDto = dto.getAddress();
+
+        address.setStreet(addressDto.getStreet());
+        address.setHouseNumber(addressDto.getHouseNumber());
+        address.setApartmentNumber(addressDto.getApartmentNumber());
+        address.setCity(addressDto.getCity());
+        address.setState(addressDto.getState());
+        address.setZipCode(addressDto.getZipCode());
+
+        // Update the country if needed (optional: fetch by name or id)
+        if (addressDto.getCountryId() != null) {
+            Country country = countryRepository.findById(addressDto.getCountryId())
+                    .orElseThrow(() -> new RuntimeException("Country not found"));
+            address.setCountry(country);
+        }
+
+        addressRepository.save(address); // Save updated address
+
+        // Save restaurant
+        restaurantRepository.save(restaurant);
+
+        // Return updated DTO
+        return mapToRestaurantResponseDto(restaurant);
+    }
+
+
     //This method takes an AddressDto and converts it into an Address entity
     private Address mapToAddressEntity(AddressRequestDto dto) {
         Address address = new Address();

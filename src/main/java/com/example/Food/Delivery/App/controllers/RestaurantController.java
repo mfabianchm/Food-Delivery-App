@@ -37,14 +37,14 @@ public class RestaurantController {
         RestaurantResponseDto created = restaurantService.createRestaurant(dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
-//
-//    // 3. Admin: Update restaurant
-//    @PutMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<RestaurantResponseDto> updateRestaurant(
-//            @PathVariable Long id,
-//            @RequestBody @Valid RestaurantRequestDto dto) {
-//        RestaurantResponseDto updated = restaurantService.updateRestaurant(id, dto);
-//        return ResponseEntity.ok(updated);
-//    }
+
+//    2. Admin: Update existing restaurant
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<RestaurantResponseDto> updateRestaurant(
+            @PathVariable Long id,
+            @RequestBody @Valid RestaurantRequestDto dto) {
+        RestaurantResponseDto updated = restaurantService.updateRestaurant(id, dto);
+        return ResponseEntity.ok(updated);
+    }
 }
