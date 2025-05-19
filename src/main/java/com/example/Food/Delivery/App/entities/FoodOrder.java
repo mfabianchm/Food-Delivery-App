@@ -80,6 +80,99 @@ public class FoodOrder {
         this.custRestaurantRating = BigDecimal.ZERO; // Default value for ratings
     }
 
+    public Long getId() {
+        return id;
+    }
+
+
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
+    }
+
+    public void setOrderDateTime(LocalDateTime orderDateTime) {
+        this.orderDateTime = orderDateTime;
+    }
+
+    public BigDecimal getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public void setDeliveryFee(BigDecimal deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public LocalDateTime getRequestedDeliveryDateTime() {
+        return requestedDeliveryDateTime;
+    }
+
+    public void setRequestedDeliveryDateTime(LocalDateTime requestedDeliveryDateTime) {
+        this.requestedDeliveryDateTime = requestedDeliveryDateTime;
+    }
+
+    public BigDecimal getCustDriverRating() {
+        return custDriverRating;
+    }
+
+    public void setCustDriverRating(BigDecimal custDriverRating) {
+        this.custDriverRating = custDriverRating;
+    }
+
+    public BigDecimal getCustRestaurantRating() {
+        return custRestaurantRating;
+    }
+
+    public void setCustRestaurantRating(BigDecimal custRestaurantRating) {
+        this.custRestaurantRating = custRestaurantRating;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public DeliveryDriver getDeliveryDriver() {
+        return deliveryDriver;
+    }
+
+    public void setDeliveryDriver(DeliveryDriver deliveryDriver) {
+        this.deliveryDriver = deliveryDriver;
+    }
+
+    public UserAddress getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(UserAddress userAddress) {
+        this.userAddress = userAddress;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
     @PrePersist
     public void prePersist() {
         if (this.custDriverRating == null) {
