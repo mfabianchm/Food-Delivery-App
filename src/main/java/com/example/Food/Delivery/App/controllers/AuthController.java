@@ -26,22 +26,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequestDto authRequest) {
-        try {
-            String jwt = authenticationService.authenticate(authRequest.getUsername(), authRequest.getPassword());
-            return ResponseEntity.ok(new AuthenticationResponse(jwt));
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect username or password");
-        }
+    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequestDto authRequest) {
+        String jwt = authenticationService.authenticate(authRequest.getUsername(), authRequest.getPassword());
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequestDto request) {
-        try {
-            User createdUser = userService.registerUser(request);
-            return ResponseEntity.ok("User registered successfully: " + createdUser.getUsername());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<String> registerUser(@RequestBody RegisterRequestDto request) {
+        User createdUser = userService.registerUser(request);
+        return ResponseEntity.ok("User registered successfully: " + createdUser.getUsername());
     }
 }
