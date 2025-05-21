@@ -3,14 +3,19 @@ package com.example.Food.Delivery.App.controllers;
 import com.example.Food.Delivery.App.dtos.FoodOrder.FoodOrderRequestDto;
 import com.example.Food.Delivery.App.dtos.FoodOrder.FoodOrderResponseDto;
 import com.example.Food.Delivery.App.services.FoodOrderService;
+import io.jsonwebtoken.Jwt;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 @RestController
 @RequestMapping("/api/orders")
+@PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
 public class FoodOrderController {
 
     private final FoodOrderService foodOrderService;

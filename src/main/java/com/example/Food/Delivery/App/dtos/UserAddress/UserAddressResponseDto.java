@@ -1,15 +1,13 @@
-package com.example.Food.Delivery.App.dtos.Restaurant;
+package com.example.Food.Delivery.App.dtos.UserAddress;
 
 import com.example.Food.Delivery.App.dtos.Address.AddressResponseDto;
 
-public class RestaurantResponseDto {
+public class UserAddressResponseDto {
     private Long id;
-    private String name;
     private AddressResponseDto address;
 
-    public RestaurantResponseDto(Long id, String name, AddressResponseDto address) {
+    public UserAddressResponseDto(Long id, AddressResponseDto address) {
         this.id = id;
-        this.name = name;
         this.address = address;
     }
 
@@ -21,15 +19,7 @@ public class RestaurantResponseDto {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public AddressResponseDto  getAddress() {
+    public AddressResponseDto getAddress() {
         return address;
     }
 

@@ -9,31 +9,40 @@ public class FoodOrderResponseDto {
     private BigDecimal deliveryFee;
     private BigDecimal totalAmount;
     private LocalDateTime requestedDeliveryDateTime;
-    private BigDecimal custDriverRating;
-    private BigDecimal custRestaurantRating;
-
+    private Integer custDriverRating;
+    private Integer custRestaurantRating;
     private String orderStatusName;
     private String userFullName;
     private String deliveryDriverName;
     private String userAddress;
     private String restaurantName;
 
-    public FoodOrderResponseDto() {
-    }
-
-    public FoodOrderResponseDto(Long id, String restaurantName, String userAddress, String deliveryDriverName, String orderStatusName, String userFullName, BigDecimal custRestaurantRating, BigDecimal custDriverRating, LocalDateTime requestedDeliveryDateTime, BigDecimal totalAmount, BigDecimal deliveryFee, LocalDateTime orderDateTime) {
+    public FoodOrderResponseDto(
+            Long id,
+            LocalDateTime orderDateTime,
+            BigDecimal deliveryFee,
+            BigDecimal totalAmount,
+            LocalDateTime requestedDeliveryDateTime,
+            Integer custDriverRating,
+            Integer custRestaurantRating,
+            String orderStatusName,
+            String userFullName,
+            String deliveryDriverName,
+            String userAddress,
+            String restaurantName
+    ) {
         this.id = id;
-        this.restaurantName = restaurantName;
-        this.userAddress = userAddress;
-        this.deliveryDriverName = deliveryDriverName;
+        this.orderDateTime = orderDateTime;
+        this.deliveryFee = deliveryFee;
+        this.totalAmount = totalAmount;
+        this.requestedDeliveryDateTime = requestedDeliveryDateTime;
+        this.custDriverRating = custDriverRating;
+        this.custRestaurantRating = custRestaurantRating;
         this.orderStatusName = orderStatusName;
         this.userFullName = userFullName;
-        this.custRestaurantRating = custRestaurantRating;
-        this.custDriverRating = custDriverRating;
-        this.requestedDeliveryDateTime = requestedDeliveryDateTime;
-        this.totalAmount = totalAmount;
-        this.deliveryFee = deliveryFee;
-        this.orderDateTime = orderDateTime;
+        this.deliveryDriverName = deliveryDriverName;
+        this.userAddress = userAddress;
+        this.restaurantName = restaurantName;
     }
 
     public Long getId() {

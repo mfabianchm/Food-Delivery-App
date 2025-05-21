@@ -24,9 +24,6 @@ public class FoodOrderRequestDto {
     @NotNull(message = "Order status id is required")
     private Long orderStatusId;
 
-    @NotNull(message = "User id is required")
-    private Long userId;
-
     @NotNull(message = "Delivery driver id is required")
     private Long deliveryDriverId;
 

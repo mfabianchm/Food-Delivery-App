@@ -26,6 +26,26 @@ public class OrderStatus {
         this.statusName = statusName;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    public List<FoodOrder> getFoodOrders() {
+        return foodOrders;
+    }
+
+    public void setFoodOrders(List<FoodOrder> foodOrders) {
+        this.foodOrders = foodOrders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

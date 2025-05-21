@@ -20,13 +20,8 @@ public class AuthenticationService {
         this.userDetailsService = userDetailsService;
     }
 
-    public String authenticate(String username, String password) throws BadCredentialsException {
-        try {
-            // Perform authentication
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Incorrect username or password");
-        }
+    public String authenticate(String username, String password) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
         // Load user details to generate JWT
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);

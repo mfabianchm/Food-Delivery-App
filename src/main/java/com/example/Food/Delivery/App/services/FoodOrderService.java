@@ -3,8 +3,11 @@ package com.example.Food.Delivery.App.services;
 import com.example.Food.Delivery.App.dtos.FoodOrder.FoodOrderRequestDto;
 import com.example.Food.Delivery.App.dtos.FoodOrder.FoodOrderResponseDto;
 import com.example.Food.Delivery.App.entities.FoodOrder;
+import com.example.Food.Delivery.App.entities.User;
 import com.example.Food.Delivery.App.repositories.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,9 +36,13 @@ public class FoodOrderService {
     }
 
 
+    @Transactional
     public FoodOrderResponseDto createOrder(FoodOrderRequestDto dto) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
         FoodOrder order = new FoodOrder(
-                userRepository.findById(dto.getUserId()).orElseThrow(),
+                user,
                 orderStatusRepository.findById(dto.getOrderStatusId()).orElseThrow(),
                 deliveryDriverRepository.findById(dto.getDeliveryDriverId()).orElseThrow(),
                 userAddressRepository.findById(dto.getUserAddressId()).orElseThrow(),
@@ -45,8 +52,7 @@ public class FoodOrderService {
                 dto.getRequestedDeliveryDateTime()
         );
 
-        order = foodOrderRepository.save(order);
-        return mapToDto(order);
+        return mapToDto(foodOrderRepository.save(order));
     }
 
     public void deleteOrder(Long id) {
@@ -69,19 +75,19 @@ public class FoodOrderService {
     }
 
     private FoodOrderResponseDto mapToDto(FoodOrder order) {
-        FoodOrderResponseDto dto = new FoodOrderResponseDto();
-        dto.setId(order.getId());
-        dto.setOrderDateTime(order.getOrderDateTime());
-        dto.setDeliveryFee(order.getDeliveryFee());
-        dto.setTotalAmount(order.getTotalAmount());
-        dto.setRequestedDeliveryDateTime(order.getRequestedDeliveryDateTime());
-        dto.setCustDriverRating(order.getCustDriverRating());
-        dto.setCustRestaurantRating(order.getCustRestaurantRating());
-        dto.setOrderStatusName(order.getOrderStatus().getStatusName());
-        dto.setUserFullName(order.getUser().getFullName());
-        dto.setDeliveryDriverName(order.getDeliveryDriver().getName());
-        dto.setUserAddress(order.getUserAddress().toString());
-        dto.setRestaurantName(order.getRestaurant().getName());
-        return dto;
+        return new FoodOrderResponseDto(
+                order.getId(),
+                order.getOrderDateTime(),
+                order.getDeliveryFee(),
+                order.getTotalAmount(),
+                order.getRequestedDeliveryDateTime(),
+                order.getCustDriverRating(),
+                order.getCustRestaurantRating(),
+                order.getOrderStatus().getStatusName(),
+                order.getUser().getFullName(),
+                order.getDeliveryDriver().getFirstName(),
+                order.getUserAddress().toString(),
+                order.getRestaurant().getName()
+        );
     }
 }

@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.App.dtos.Address;
 
+//This class is used inside UserAddress and Restaurant Dtos
 public class AddressResponseDto {
     private Long id;
     private String street;
@@ -10,14 +11,12 @@ public class AddressResponseDto {
     private String zipCode;
     private String countryName;
 
-    public AddressResponseDto() {
-    }
-
-    public AddressResponseDto(Long id, String street, String apartmentNumber, String houseNumber, String city, String state, String zipCode, String countryName) {
+    public AddressResponseDto(Long id, String street, String houseNumber, String apartmentNumber,
+                              String city, String state, String zipCode, String countryName) {
         this.id = id;
         this.street = street;
-        this.apartmentNumber = apartmentNumber;
         this.houseNumber = houseNumber;
+        this.apartmentNumber = apartmentNumber;
         this.city = city;
         this.state = state;
         this.zipCode = zipCode;

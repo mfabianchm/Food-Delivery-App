@@ -44,6 +44,8 @@ public class FoodOrder {
     @Max(value = 5, message = "Restaurant rating must be at most 5")
     private BigDecimal custRestaurantRating;
 
+
+    //statusName
     @ManyToOne
     @JoinColumn(name = "order_status_id", nullable = false)
     private OrderStatus orderStatus;
