@@ -4,6 +4,7 @@ import com.example.Food.Delivery.App.dtos.MenuItem.MenuItemRequestDto;
 import com.example.Food.Delivery.App.dtos.MenuItem.MenuItemResponseDto;
 import com.example.Food.Delivery.App.entities.MenuItem;
 import com.example.Food.Delivery.App.entities.Restaurant;
+import com.example.Food.Delivery.App.mappers.MenuItemMapper;
 import com.example.Food.Delivery.App.repositories.MenuItemRepository;
 import com.example.Food.Delivery.App.repositories.RestaurantRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,52 +20,51 @@ public class MenuItemService {
     private final MenuItemRepository menuItemRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public MenuItemService(MenuItemRepository menuItemRepository, RestaurantRepository restaurantRepository) {
+    private final MenuItemMapper menuItemMapper;
+
+    public MenuItemService(MenuItemRepository menuItemRepository, RestaurantRepository restaurantRepository, MenuItemMapper menuItemMapper  ) {
         this.menuItemRepository = menuItemRepository;
         this.restaurantRepository = restaurantRepository;
+        this.menuItemMapper = menuItemMapper;
     }
 
     public MenuItemResponseDto createMenuItem(MenuItemRequestDto dto) {
         Restaurant restaurant = restaurantRepository.findById(dto.getRestaurantId())
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant not found"));
 
-        MenuItem menuItem = new MenuItem(
-                dto.getName(),
-                dto.getDescription(),
-                dto.getPrice(),
-                restaurant
-        );
+        MenuItem menuItem = menuItemMapper.toEntity(dto, restaurant);
 
-        MenuItem saved = menuItemRepository.save(menuItem);
-        return toResponseDto(saved);
+        return menuItemMapper.toDto(menuItemRepository.save(menuItem));
     }
 
     public MenuItemResponseDto getMenuItemById(Long id) {
         MenuItem menuItem = menuItemRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("MenuItem not found"));
 
-        return toResponseDto(menuItem);
+        return menuItemMapper.toDto(menuItem);
     }
 
     public List<MenuItemResponseDto> getAllMenuItems() {
         return menuItemRepository.findAll().stream()
-                .map(this::toResponseDto)
+                .map(menuItemMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     public MenuItemResponseDto updateMenuItem(Long id, MenuItemRequestDto dto) {
-        MenuItem existing = menuItemRepository.findById(id)
+
+        MenuItem existingMenuItem = menuItemRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("MenuItem not found"));
 
         Restaurant restaurant = restaurantRepository.findById(dto.getRestaurantId())
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant not found"));
 
-        existing.setName(dto.getName());
-        existing.setDescription(dto.getDescription());
-        existing.setPrice(dto.getPrice());
-        existing.setRestaurant(restaurant);
+        existingMenuItem.setName(dto.getName());
+        existingMenuItem.setDescription(dto.getDescription());
+        existingMenuItem.setPrice(dto.getPrice());
+        existingMenuItem.setRestaurant(restaurant);
 
-        return toResponseDto(menuItemRepository.save(existing));
+        return menuItemMapper.toDto(menuItemRepository.save(existingMenuItem));
+
     }
 
     public void deleteMenuItem(Long id) {
@@ -74,14 +74,5 @@ public class MenuItemService {
         menuItemRepository.deleteById(id);
     }
 
-    private MenuItemResponseDto toResponseDto(MenuItem item) {
-        return new MenuItemResponseDto(
-                item.getId(),
-                item.getName(),
-                item.getDescription(),
-                item.getPrice(),
-                item.getRestaurant().getId(),
-                item.getRestaurant().getName()
-        );
-    }
+
 }
