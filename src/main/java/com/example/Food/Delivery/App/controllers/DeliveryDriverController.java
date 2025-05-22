@@ -2,6 +2,8 @@ package com.example.Food.Delivery.App.controllers;
 
 import com.example.Food.Delivery.App.dtos.DeliveryDriver.DeliveryDriverRequestDto;
 import com.example.Food.Delivery.App.dtos.DeliveryDriver.DeliveryDriverResponseDto;
+import com.example.Food.Delivery.App.dtos.FoodOrder.FoodOrderResponseDto;
+import com.example.Food.Delivery.App.dtos.OrderStatus.ChangeOrderStatusRequestDto;
 import com.example.Food.Delivery.App.entities.FoodOrder;
 import com.example.Food.Delivery.App.services.DeliveryDriverService;
 import jakarta.validation.Valid;
@@ -50,26 +52,19 @@ public class DeliveryDriverController {
     }
 
     @PostMapping("/{orderId}/accept")
-    public ResponseEntity<FoodOrder> acceptOrder(@PathVariable Long orderId) {
-        FoodOrder updatedOrder = deliveryDriverService.acceptOrder(orderId);
+    public ResponseEntity<FoodOrderResponseDto> acceptOrder(@PathVariable Long orderId) {
+        FoodOrderResponseDto updatedOrder = deliveryDriverService.acceptOrder(orderId);
         return ResponseEntity.ok(updatedOrder);
     }
 
     @PatchMapping("/{orderId}/status")
-    public ResponseEntity<FoodOrder> changeOrderStatus(
+    public ResponseEntity<FoodOrderResponseDto> changeOrderStatus(
             @PathVariable Long orderId,
-            @RequestParam String newStatus) {
+            @RequestBody @Valid ChangeOrderStatusRequestDto request) {
 
-        OrderStatusType statusEnum;
-        try {
-            statusEnum = OrderStatusType.valueOf(newStatus.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                    .body(null);
-        }
-
-        FoodOrder updatedOrder = deliveryDriverService.updateOrderStatus(orderId, statusEnum.name());
+        FoodOrderResponseDto updatedOrder = deliveryDriverService.updateOrderStatus(orderId, request.getNewStatus().name());
         return ResponseEntity.ok(updatedOrder);
+
     }
 
 }

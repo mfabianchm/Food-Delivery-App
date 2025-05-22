@@ -2,10 +2,13 @@ package com.example.Food.Delivery.App.services;
 
 import com.example.Food.Delivery.App.dtos.DeliveryDriver.DeliveryDriverRequestDto;
 import com.example.Food.Delivery.App.dtos.DeliveryDriver.DeliveryDriverResponseDto;
+import com.example.Food.Delivery.App.dtos.FoodOrder.FoodOrderResponseDto;
 import com.example.Food.Delivery.App.entities.DeliveryDriver;
 import com.example.Food.Delivery.App.entities.FoodOrder;
 import com.example.Food.Delivery.App.entities.OrderStatus;
 import com.example.Food.Delivery.App.enums.OrderStatusType;
+import com.example.Food.Delivery.App.mappers.DeliveryDriverMapper;
+import com.example.Food.Delivery.App.mappers.FoodOrderMapper;
 import com.example.Food.Delivery.App.repositories.DeliveryDriverRepository;
 import com.example.Food.Delivery.App.repositories.FoodOrderRepository;
 import com.example.Food.Delivery.App.repositories.OrderStatusRepository;
@@ -24,37 +27,39 @@ public class DeliveryDriverService {
     private final OrderStatusRepository orderStatusRepository;
     private final DeliveryDriverRepository deliveryDriverRepository;
 
+    private final DeliveryDriverMapper deliveryDriverMapper;
+    private final FoodOrderMapper foodOrderMapper;
+
     public DeliveryDriverService(FoodOrderRepository foodOrderRepository,
                                  AuthenticatedUserUtil authenticatedUserUtil,
                                  OrderStatusRepository orderStatusRepository,
-                                 DeliveryDriverRepository deliveryDriverRepository) {
+                                 DeliveryDriverRepository deliveryDriverRepository,
+                                 DeliveryDriverMapper deliveryDriverMapper,
+                                 FoodOrderMapper foodOrderMapper) {
         this.foodOrderRepository = foodOrderRepository;
         this.authenticatedUserUtil = authenticatedUserUtil;
         this.orderStatusRepository = orderStatusRepository;
         this.deliveryDriverRepository = deliveryDriverRepository;
+        this.deliveryDriverMapper = deliveryDriverMapper;
+        this.foodOrderMapper = foodOrderMapper;
     }
 
     public DeliveryDriverResponseDto createDriver(DeliveryDriverRequestDto dto) {
-        DeliveryDriver driver = new DeliveryDriver();
-        driver.setFirstName(dto.getFirstName());
-        driver.setLastName(dto.getLastName());
-        driver.setEmail(dto.getEmail());
-        driver.setPhoneNumber(dto.getPhoneNumber());
-
-        DeliveryDriver saved = deliveryDriverRepository.save(driver);
-        return toDto(saved);
+       DeliveryDriver deliveryDriver = deliveryDriverMapper.toEntity(dto);
+       deliveryDriverRepository.save(deliveryDriver);
+        return deliveryDriverMapper.toDto(deliveryDriver);
     }
 
     public List<DeliveryDriverResponseDto> getAllDrivers() {
         return deliveryDriverRepository.findAll().stream()
-                .map(this::toDto)
+                .map(deliveryDriverMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     public DeliveryDriverResponseDto getDriverById(Long id) {
         DeliveryDriver driver = deliveryDriverRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Driver not found"));
-        return toDto(driver);
+        return deliveryDriverMapper.toDto(driver);
     }
 
     public DeliveryDriverResponseDto updateDriver(Long id, DeliveryDriverRequestDto dto) {
@@ -66,7 +71,7 @@ public class DeliveryDriverService {
         driver.setEmail(dto.getEmail());
         driver.setPhoneNumber(dto.getPhoneNumber());
 
-        return toDto(deliveryDriverRepository.save(driver));
+        return deliveryDriverMapper.toDto(deliveryDriverRepository.save(driver));
     }
 
     public void deleteDriver(Long id) {
@@ -76,26 +81,12 @@ public class DeliveryDriverService {
         deliveryDriverRepository.deleteById(id);
     }
 
-    private DeliveryDriverResponseDto toDto(DeliveryDriver driver) {
-        return new DeliveryDriverResponseDto(
-                driver.getId(),
-                driver.getFirstName(),
-                driver.getLastName(),
-                driver.getEmail(),
-                driver.getPhoneNumber()
-        );
-    }
 
     @Transactional
-    public FoodOrder acceptOrder(Long orderId) {
+    public FoodOrderResponseDto acceptOrder(Long orderId) {
         FoodOrder order = foodOrderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + orderId));
 
-        // Get authenticated driver
-        /*Retrieving the DeliveryDriver entity inside the service lets you know which driver
-        is performing the operation, so you can:
-       1. Assign orders correctly
-       2.Enforce driver-specific rules.*/
         DeliveryDriver driver = authenticatedUserUtil.getAuthenticatedDeliveryDriver();
 
         // Assigns driver to order
@@ -104,20 +95,23 @@ public class DeliveryDriverService {
         // Change order status to ACCEPTED
         OrderStatus acceptedStatus = orderStatusRepository.findByStatusName(OrderStatusType.ACCEPTED.name())
                 .orElseThrow(() -> new EntityNotFoundException("OrderStatus ACCEPTED not found"));
-
         order.setOrderStatus(acceptedStatus);
 
-        return foodOrderRepository.save(order);
+        return foodOrderMapper.toDto(foodOrderRepository.save(order));
     }
 
     @Transactional
-    public FoodOrder updateOrderStatus(Long orderId, String newStatusName) {
+    public FoodOrderResponseDto updateOrderStatus(Long orderId, String newStatusName) {
         // Get authenticated driver
         DeliveryDriver driver = authenticatedUserUtil.getAuthenticatedDeliveryDriver();
 
         // Find the order that belongs to this driver
         FoodOrder order = foodOrderRepository.findByIdAndDeliveryDriverId(orderId, driver.getId())
-                .orElseThrow(() -> new RuntimeException("Order not found or not assigned to this driver"));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found or not assigned to this driver"));
+
+        if (order.getOrderStatus().getStatusName().equalsIgnoreCase(newStatusName)) {
+            return foodOrderMapper.toDto(order);
+        }
 
         // Find the OrderStatus entity by statusName
         OrderStatus newStatus = orderStatusRepository.findByStatusName(newStatusName)
@@ -127,6 +121,6 @@ public class DeliveryDriverService {
         order.setOrderStatus(newStatus);
 
         // Save the updated order
-        return foodOrderRepository.save(order);
+        return foodOrderMapper.toDto(foodOrderRepository.save(order));
     }
 }
