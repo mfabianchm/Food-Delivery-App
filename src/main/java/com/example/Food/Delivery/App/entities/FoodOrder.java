@@ -37,12 +37,12 @@ public class FoodOrder {
     @Column(name = "cust_driver_rating", nullable = false)
     @Min(value = 1, message = "Driver rating must be at least 1")
     @Max(value = 5, message = "Driver rating must be at most 5")
-    private BigDecimal custDriverRating;
+    private Integer custDriverRating;
 
     @Column(name = "cust_restaurant_rating", nullable = false)
     @Min(value = 1, message = "Restaurant rating must be at least 1")
     @Max(value = 5, message = "Restaurant rating must be at most 5")
-    private BigDecimal custRestaurantRating;
+    private Integer custRestaurantRating;
 
 
     //statusName
@@ -78,8 +78,8 @@ public class FoodOrder {
         this.deliveryFee = deliveryFee;
         this.totalAmount = totalAmount;
         this.requestedDeliveryDateTime = requestedDeliveryDateTime;
-        this.custDriverRating = BigDecimal.ZERO;  // Default value for ratings
-        this.custRestaurantRating = BigDecimal.ZERO; // Default value for ratings
+        this.custDriverRating = 0;  // Default value for ratings
+        this.custRestaurantRating = 0; // Default value for ratings
     }
 
     public Long getId() {
@@ -119,19 +119,19 @@ public class FoodOrder {
         this.requestedDeliveryDateTime = requestedDeliveryDateTime;
     }
 
-    public BigDecimal getCustDriverRating() {
+    public Integer getCustDriverRating() {
         return custDriverRating;
     }
 
-    public void setCustDriverRating(BigDecimal custDriverRating) {
+    public void setCustDriverRating(Integer custDriverRating) {
         this.custDriverRating = custDriverRating;
     }
 
-    public BigDecimal getCustRestaurantRating() {
+    public Integer getCustRestaurantRating() {
         return custRestaurantRating;
     }
 
-    public void setCustRestaurantRating(BigDecimal custRestaurantRating) {
+    public void setCustRestaurantRating(Integer custRestaurantRating) {
         this.custRestaurantRating = custRestaurantRating;
     }
 
@@ -178,10 +178,10 @@ public class FoodOrder {
     @PrePersist
     public void prePersist() {
         if (this.custDriverRating == null) {
-            this.custDriverRating = BigDecimal.ZERO;
+            this.custDriverRating = 0;
         }
         if (this.custRestaurantRating == null) {
-            this.custRestaurantRating = BigDecimal.ZERO;
+            this.custRestaurantRating = 0;
         }
     }
 

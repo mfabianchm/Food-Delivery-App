@@ -1,5 +1,9 @@
 package com.example.Food.Delivery.App.dtos.FoodOrder;
 
+import com.example.Food.Delivery.App.dtos.Address.AddressResponseDto;
+import com.example.Food.Delivery.App.dtos.UserAddress.UserAddressResponseDto;
+import com.example.Food.Delivery.App.entities.UserAddress;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -14,7 +18,7 @@ public class FoodOrderResponseDto {
     private String orderStatusName;
     private String userFullName;
     private String deliveryDriverName;
-    private String userAddress;
+    private AddressResponseDto userAddress;
     private String restaurantName;
 
     public FoodOrderResponseDto(
@@ -28,7 +32,7 @@ public class FoodOrderResponseDto {
             String orderStatusName,
             String userFullName,
             String deliveryDriverName,
-            String userAddress,
+            AddressResponseDto userAddress,
             String restaurantName
     ) {
         this.id = id;
@@ -65,11 +69,11 @@ public class FoodOrderResponseDto {
         return requestedDeliveryDateTime;
     }
 
-    public BigDecimal getCustDriverRating() {
+    public Integer getCustDriverRating() {
         return custDriverRating;
     }
 
-    public BigDecimal getCustRestaurantRating() {
+    public Integer getCustRestaurantRating() {
         return custRestaurantRating;
     }
 
@@ -85,7 +89,7 @@ public class FoodOrderResponseDto {
         return deliveryDriverName;
     }
 
-    public String getUserAddress() {
+    public AddressResponseDto getUserAddress() {
         return userAddress;
     }
 

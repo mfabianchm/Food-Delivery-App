@@ -65,13 +65,6 @@ public class FoodOrderRequestDto {
         this.deliveryDriverId = deliveryDriverId;
     }
 
-    public @NotNull(message = "User id is required") Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(@NotNull(message = "User id is required") Long userId) {
-        this.userId = userId;
-    }
 
     public @NotNull(message = "Order status id is required") Long getOrderStatusId() {
         return orderStatusId;

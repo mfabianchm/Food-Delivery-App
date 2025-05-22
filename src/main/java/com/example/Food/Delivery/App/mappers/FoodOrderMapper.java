@@ -8,6 +8,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class FoodOrderMapper {
 
+    private final AddressMapper addressMapper;
+
+    public FoodOrderMapper(AddressMapper addressMapper) {
+        this.addressMapper = addressMapper;
+    }
+
     public FoodOrder toEntity(
             FoodOrderRequestDto dto,
             User user,
@@ -38,9 +44,9 @@ public class FoodOrderMapper {
                 order.getCustDriverRating(),
                 order.getCustRestaurantRating(),
                 order.getOrderStatus().getStatusName(),
-                order.getUser().getFullName(),               // assuming getFullName() exists
-                order.getDeliveryDriver().getFirstName(),     // assuming getFullName() exists
-                order.getUserAddress().getAddress(),     // assuming getFullAddress() exists
+                order.getUser().getFullName(),
+                order.getDeliveryDriver().getFirstName(),
+                addressMapper.toDto(order.getUserAddress().getAddress()),
                 order.getRestaurant().getName()
         );
     }

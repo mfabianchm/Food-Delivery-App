@@ -3,15 +3,14 @@ package com.example.Food.Delivery.App.controllers;
 import com.example.Food.Delivery.App.dtos.FoodOrder.FoodOrderRequestDto;
 import com.example.Food.Delivery.App.dtos.FoodOrder.FoodOrderResponseDto;
 import com.example.Food.Delivery.App.services.FoodOrderService;
-import io.jsonwebtoken.Jwt;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.oauth2.jwt.Jwt;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -26,8 +25,9 @@ public class FoodOrderController {
     }
 
     @PostMapping
-    public ResponseEntity<FoodOrderResponseDto> createOrder(@RequestBody @Valid FoodOrderRequestDto dto) {
-        return new ResponseEntity<>(foodOrderService.createOrder(dto), HttpStatus.CREATED);
+    public ResponseEntity<FoodOrderResponseDto> createOrder(@RequestBody @Valid FoodOrderRequestDto dto, Principal principal) {
+        String email = principal.getName();
+        return new ResponseEntity<>(foodOrderService.createOrder(dto, email), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -41,5 +41,11 @@ public class FoodOrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         foodOrderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FoodOrderResponseDto> getOrderById(@PathVariable Long id) {
+        FoodOrderResponseDto orderDto = foodOrderService.getOrderById(id);
+        return ResponseEntity.ok(orderDto);
     }
 }
