@@ -6,6 +6,7 @@ import com.example.Food.Delivery.App.entities.FoodOrder;
 import com.example.Food.Delivery.App.entities.MenuItem;
 import com.example.Food.Delivery.App.entities.OrderMenuItem;
 import com.example.Food.Delivery.App.exceptions.ResourceNotFoundException;
+import com.example.Food.Delivery.App.mappers.OrderMenuItemMapper;
 import com.example.Food.Delivery.App.repositories.FoodOrderRepository;
 import com.example.Food.Delivery.App.repositories.MenuItemRepository;
 import com.example.Food.Delivery.App.repositories.OrderMenuItemRepository;
@@ -21,12 +22,16 @@ public class OrderMenuItemService {
     private final FoodOrderRepository foodOrderRepository;
     private final MenuItemRepository menuItemRepository;
 
+    private final OrderMenuItemMapper orderMenuItemMapper;
+
     public OrderMenuItemService(OrderMenuItemRepository orderMenuItemRepository,
                                 FoodOrderRepository foodOrderRepository,
-                                MenuItemRepository menuItemRepository) {
+                                MenuItemRepository menuItemRepository,
+                                OrderMenuItemMapper orderMenuItemMapper) {
         this.orderMenuItemRepository = orderMenuItemRepository;
         this.foodOrderRepository = foodOrderRepository;
         this.menuItemRepository = menuItemRepository;
+        this.orderMenuItemMapper = orderMenuItemMapper;
     }
 
     // List all items for an order
@@ -34,8 +39,10 @@ public class OrderMenuItemService {
         FoodOrder order = foodOrderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id " + orderId));
         List<OrderMenuItem> items = orderMenuItemRepository.findByFoodOrder(order);
+
+
         return items.stream()
-                .map(this::mapToResponseDto)
+                .map(orderMenuItemMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -48,7 +55,7 @@ public class OrderMenuItemService {
 
         OrderMenuItem orderMenuItem = new OrderMenuItem(order, menuItem, dto.getQuantityOrdered());
         OrderMenuItem saved = orderMenuItemRepository.save(orderMenuItem);
-        return mapToResponseDto(saved);
+        return orderMenuItemMapper.toDto(saved);
     }
 
     // Update quantity of menu item in order
@@ -62,10 +69,9 @@ public class OrderMenuItemService {
             throw new IllegalArgumentException("OrderMenuItem does not belong to Order " + orderId);
         }
 
-        // Optionally allow updating menuItem? Usually not, so only quantity:
         existingItem.setQuantity_ordered(dto.getQuantityOrdered());
         OrderMenuItem updated = orderMenuItemRepository.save(existingItem);
-        return mapToResponseDto(updated);
+        return orderMenuItemMapper.toDto(updated);
     }
 
     // Delete an item from order
@@ -82,12 +88,4 @@ public class OrderMenuItemService {
         orderMenuItemRepository.delete(existingItem);
     }
 
-    // Mapping method DTO <- Entity
-    private OrderMenuItemResponseDto mapToResponseDto(OrderMenuItem orderMenuItem) {
-        OrderMenuItemResponseDto dto = new OrderMenuItemResponseDto();
-        dto.setId(orderMenuItem.getId());
-        dto.setMenuItemName(orderMenuItem.getMenuItem().getName());
-        dto.setQuantityOrdered(orderMenuItem.getQuantity_ordered());
-        return dto;
-    }
 }

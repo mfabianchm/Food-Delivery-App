@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/orders/{orderId}/items")
+@PreAuthorize("hasRole('CUSTOMER')")
 public class OrderMenuItemController {
 
     private final OrderMenuItemService orderMenuItemService;
@@ -21,17 +22,13 @@ public class OrderMenuItemController {
         this.orderMenuItemService = orderMenuItemService;
     }
 
-    // ✅ Only customers can view order items
     @GetMapping
-    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<OrderMenuItemResponseDto>> getOrderMenuItems(@PathVariable Long orderId) {
         List<OrderMenuItemResponseDto> items = orderMenuItemService.getOrderMenuItemsByOrderId(orderId);
         return ResponseEntity.ok(items);
     }
 
-    // ✅ Only customers can add items to their orders
     @PostMapping
-    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<OrderMenuItemResponseDto> addMenuItemToOrder(
             @PathVariable Long orderId,
             @Valid @RequestBody OrderMenuItemRequestDto dto) {
@@ -39,9 +36,7 @@ public class OrderMenuItemController {
         return ResponseEntity.ok(created);
     }
 
-    // ✅ Only customers can update order items
     @PutMapping("/{orderMenuItemId}")
-    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<OrderMenuItemResponseDto> updateMenuItemInOrder(
             @PathVariable Long orderId,
             @PathVariable Long orderMenuItemId,
@@ -50,9 +45,7 @@ public class OrderMenuItemController {
         return ResponseEntity.ok(updated);
     }
 
-    // ✅ Only customers can delete order items
     @DeleteMapping("/{orderMenuItemId}")
-    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<Void> deleteMenuItemFromOrder(
             @PathVariable Long orderId,
             @PathVariable Long orderMenuItemId) {
