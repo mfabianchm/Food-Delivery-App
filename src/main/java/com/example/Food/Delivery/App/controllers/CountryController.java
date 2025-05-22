@@ -22,14 +22,23 @@ public class CountryController {
     }
 
     @PostMapping
-    public ResponseEntity<Country> createCountry(@RequestBody @Valid CountryDto dto) {
-        Country saved = countryService.createCountry(dto);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    public ResponseEntity<CountryDto> createCountry(@RequestBody @Valid CountryDto dto) {
+        return new ResponseEntity<>(countryService.createCountry(dto), HttpStatus.CREATED);
     }
 
     @GetMapping
     @PreAuthorize("permitAll()")
-    public List<Country> getAllCountries() {
+    public List<CountryDto> getAllCountries() {
         return countryService.getAllCountries();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CountryDto> getCountryById(@PathVariable Long id) {
+        return ResponseEntity.ok(countryService.getCountryById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CountryDto> updateCountry(@PathVariable Long id, @RequestBody @Valid CountryDto dto) {
+        return ResponseEntity.ok(countryService.updateCountry(id, dto));
     }
 }
