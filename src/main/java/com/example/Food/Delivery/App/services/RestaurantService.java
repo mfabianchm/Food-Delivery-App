@@ -106,11 +106,8 @@ public class RestaurantService {
 
         addressRepository.save(address); // Save updated address
 
-        // Save restaurant
-        restaurantRepository.save(restaurant);
-
         // Return updated DTO
-        return mapToRestaurantResponseDto(restaurant);
+        return restaurantMapper.toDto(restaurantRepository.save(restaurant));
     }
 
 
