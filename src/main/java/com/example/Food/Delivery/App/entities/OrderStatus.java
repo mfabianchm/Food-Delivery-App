@@ -14,28 +14,41 @@ public class OrderStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /*@Column(nullable = false, unique = true)
+    private String statusName;*/
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
-    private String statusName;
+    private OrderStatusType statusType;
 
     @OneToMany(mappedBy = "orderStatus", fetch = FetchType.LAZY)
     private List<FoodOrder> foodOrders;
 
     public OrderStatus() {}
 
-    public OrderStatus(String statusName) {
-        this.statusName = statusName;
+    public OrderStatus(OrderStatusType statusType) {
+        this.statusType = statusType;
+    }
+
+    public OrderStatus(OrderStatusType statusType, List<FoodOrder> foodOrders) {
+        this.statusType = statusType;
+        this.foodOrders = foodOrders;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getStatusName() {
-        return statusName;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setStatusName(String statusName) {
-        this.statusName = statusName;
+    public OrderStatusType getStatusType() {
+        return statusType;
+    }
+
+    public void setStatusType(OrderStatusType statusType) {
+        this.statusType = statusType;
     }
 
     public List<FoodOrder> getFoodOrders() {
@@ -48,22 +61,21 @@ public class OrderStatus {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderStatus that = (OrderStatus) o;
-        return Objects.equals(id, that.id) && Objects.equals(statusName, that.statusName) && Objects.equals(foodOrders, that.foodOrders);
+        return Objects.equals(id, that.id) && statusType == that.statusType && Objects.equals(foodOrders, that.foodOrders);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, statusName, foodOrders);
+        return Objects.hash(id, statusType, foodOrders);
     }
 
     @Override
     public String toString() {
         return "OrderStatus{" +
                 "id=" + id +
-                ", statusName='" + statusName + '\'' +
+                ", statusType=" + statusType +
                 ", foodOrders=" + foodOrders +
                 '}';
     }

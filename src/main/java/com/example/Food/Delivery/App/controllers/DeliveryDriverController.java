@@ -25,38 +25,46 @@ public class DeliveryDriverController {
         this.deliveryDriverService = deliveryDriverService;
     }
 
-    @PostMapping
-    public ResponseEntity<DeliveryDriverResponseDto> create(@RequestBody @Valid DeliveryDriverRequestDto dto) {
-        return new ResponseEntity<>(deliveryDriverService.createDriver(dto), HttpStatus.CREATED);
+    @PreAuthorize("hasAnyRole('ADMIN','DRIVER')")
+    @GetMapping("/{id}")
+    public DeliveryDriverResponseDto getDriverById(@PathVariable Long id) {
+        return deliveryDriverService.getDriverById(id);
     }
 
+
+    // === ADMIN-ONLY ENDPOINTS ===
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<DeliveryDriverResponseDto> getAll() {
         return deliveryDriverService.getAllDrivers();
     }
 
-    @GetMapping("/{id}")
-    public DeliveryDriverResponseDto getById(@PathVariable Long id) {
-        return deliveryDriverService.getDriverById(id);
-    }
 
-    @PutMapping("/{id}")
-    public DeliveryDriverResponseDto update(@PathVariable Long id, @RequestBody @Valid DeliveryDriverRequestDto dto) {
+    // === DRIVER-ONLY ENDPOINTS ===
+
+    @PreAuthorize("hasRole('DRIVER')")
+    @PutMapping("/me")
+    public DeliveryDriverResponseDto updateMyProfile(@PathVariable Long id, @RequestBody @Valid DeliveryDriverRequestDto dto) {
         return deliveryDriverService.updateDriver(id, dto);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @PreAuthorize("hasRole('DRIVER')")
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteMyProfile(@PathVariable Long id) {
         deliveryDriverService.deleteDriver(id);
         return ResponseEntity.noContent().build();
     }
 
+
+    @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/{orderId}/accept")
     public ResponseEntity<FoodOrderResponseDto> acceptOrder(@PathVariable Long orderId) {
         FoodOrderResponseDto updatedOrder = deliveryDriverService.acceptOrder(orderId);
         return ResponseEntity.ok(updatedOrder);
     }
 
+    @PreAuthorize("hasRole('DRIVER')")
     @PatchMapping("/{orderId}/status")
     public ResponseEntity<FoodOrderResponseDto> changeOrderStatus(
             @PathVariable Long orderId,

@@ -1,11 +1,13 @@
 package com.example.Food.Delivery.App;
 
 import com.example.Food.Delivery.App.entities.OrderStatus;
+import com.example.Food.Delivery.App.enums.OrderStatusType;
 import com.example.Food.Delivery.App.repositories.OrderStatusRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -17,16 +19,23 @@ public class FoodDeliveryAppApplication {
 	}
 
 
-	@Bean
-	public CommandLineRunner seedOrderStatuses(OrderStatusRepository orderStatusRepository) {
-		return args -> {
-			List<String> defaultStatuses = List.of("Pending", "Confirmed", "Preparing", "On the way", "Delivered", "Cancelled");
+	@Component
+	public class OrderStatusSeeder implements CommandLineRunner {
 
-			for (String status : defaultStatuses) {
-				orderStatusRepository.findByName(status)
-						.orElseGet(() -> orderStatusRepository.save(new OrderStatus(status)));
+		private final OrderStatusRepository orderStatusRepository;
+
+		public OrderStatusSeeder(OrderStatusRepository orderStatusRepository) {
+			this.orderStatusRepository = orderStatusRepository;
+		}
+
+		@Override
+		public void run(String... args) {
+			for (OrderStatusType type : OrderStatusType.values()) {
+				orderStatusRepository.findByStatusType(type).orElseGet(() ->
+						orderStatusRepository.save(new OrderStatus(type))
+				);
 			}
-		};
+		}
 	}
 
 }

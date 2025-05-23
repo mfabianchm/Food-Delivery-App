@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeliveryDriverMapper {
 
-    public DeliveryDriver toEntity(DeliveryDriverRequestDto dto) {
+   /* public DeliveryDriver toEntity(DeliveryDriverRequestDto dto) {
        return new DeliveryDriver(
                dto.getFirstName(),
                dto.getLastName(),
                dto.getEmail(),
                dto.getPhoneNumber()
        );
-    }
+    }*/
 
     public DeliveryDriverResponseDto toDto(DeliveryDriver entity) {
         return new DeliveryDriverResponseDto(

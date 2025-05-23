@@ -5,8 +5,12 @@ import jakarta.validation.constraints.*;
 
 public class RegisterRequestDto {
     @NotNull
-    @Size(min = 3, max = 100)
-    private String fullName;
+    @Size(min = 2, max = 50)
+    private String firstName;
+
+    @NotNull
+    @Size(min = 2, max = 50)
+    private String lastName;
 
     @NotNull
     @Email
@@ -30,8 +34,9 @@ public class RegisterRequestDto {
     // Constructors
     public RegisterRequestDto() {}
 
-    public RegisterRequestDto(String fullName, String email, String username, String password, UserRole role, String phoneNumber) {
-        this.fullName = fullName;
+    public RegisterRequestDto(String firstName, String lastName, String email, String username, String password, UserRole role, String phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
@@ -41,12 +46,21 @@ public class RegisterRequestDto {
 
     // Getters and Setters
 
-    public String getFullName() {
-        return fullName;
+
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {

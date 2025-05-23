@@ -38,16 +38,31 @@ public class DeliveryDriver {
     @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Invalid phone number format")
     private String phoneNumber;
 
+    @OneToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
+
     @OneToMany(mappedBy = "deliveryDriver")
     private List<FoodOrder> foodOrders;
 
-    public DeliveryDriver() {}
+    public DeliveryDriver() {
+    }
 
-    public DeliveryDriver(String firstName, String lastName, String email, String phoneNumber) {
+    public DeliveryDriver(String firstName, String email, String lastName, String phoneNumber, User user, List<FoodOrder> foodOrders) {
         this.firstName = firstName;
-        this.lastName = lastName;
         this.email = email;
+        this.lastName = lastName;
         this.phoneNumber = phoneNumber;
+        this.user = user;
+        this.foodOrders = foodOrders;
+    }
+
+    public List<FoodOrder> getFoodOrders() {
+        return foodOrders;
+    }
+
+    public void setFoodOrders(List<FoodOrder> foodOrders) {
+        this.foodOrders = foodOrders;
     }
 
     public Long getId() {
@@ -86,24 +101,24 @@ public class DeliveryDriver {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<FoodOrder> getFoodOrders() {
-        return foodOrders;
+    public User getUser() {
+        return user;
     }
 
-    public void setFoodOrders(List<FoodOrder> foodOrders) {
-        this.foodOrders = foodOrders;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         DeliveryDriver that = (DeliveryDriver) o;
-        return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(email, that.email) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(foodOrders, that.foodOrders);
+        return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(email, that.email) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(user, that.user) && Objects.equals(foodOrders, that.foodOrders);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email, phoneNumber, foodOrders);
+        return Objects.hash(id, firstName, lastName, email, phoneNumber, user, foodOrders);
     }
 
     @Override
@@ -114,6 +129,8 @@ public class DeliveryDriver {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", user=" + user +
+                ", foodOrders=" + foodOrders +
                 '}';
     }
 }

@@ -43,8 +43,8 @@ public class FoodOrderMapper {
                 order.getRequestedDeliveryDateTime(),
                 order.getCustDriverRating(),
                 order.getCustRestaurantRating(),
-                order.getOrderStatus().getStatusName(),
-                order.getUser().getFullName(),
+                order.getOrderStatus().getStatusType().name(),
+                order.getUser().getFirstName(),
                 order.getDeliveryDriver().getFirstName(),
                 addressMapper.toDto(order.getUserAddress().getAddress()),
                 order.getRestaurant().getName()

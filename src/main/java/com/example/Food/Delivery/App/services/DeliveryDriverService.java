@@ -44,12 +44,6 @@ public class DeliveryDriverService {
         this.foodOrderMapper = foodOrderMapper;
     }
 
-    public DeliveryDriverResponseDto createDriver(DeliveryDriverRequestDto dto) {
-       DeliveryDriver deliveryDriver = deliveryDriverMapper.toEntity(dto);
-       deliveryDriverRepository.save(deliveryDriver);
-        return deliveryDriverMapper.toDto(deliveryDriver);
-    }
-
     public List<DeliveryDriverResponseDto> getAllDrivers() {
         return deliveryDriverRepository.findAll().stream()
                 .map(deliveryDriverMapper::toDto)
@@ -93,7 +87,7 @@ public class DeliveryDriverService {
         order.setDeliveryDriver(driver);
 
         // Change order status to ACCEPTED
-        OrderStatus acceptedStatus = orderStatusRepository.findByStatusName(OrderStatusType.ACCEPTED.name())
+        OrderStatus acceptedStatus = orderStatusRepository.findByStatusType(OrderStatusType.ACCEPTED)
                 .orElseThrow(() -> new EntityNotFoundException("OrderStatus ACCEPTED not found"));
         order.setOrderStatus(acceptedStatus);
 
@@ -109,13 +103,22 @@ public class DeliveryDriverService {
         FoodOrder order = foodOrderRepository.findByIdAndDeliveryDriverId(orderId, driver.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Order not found or not assigned to this driver"));
 
-        if (order.getOrderStatus().getStatusName().equalsIgnoreCase(newStatusName)) {
+
+        //Convert the String to OrderStatusType enum
+        OrderStatusType newStatusType;
+        try {
+            newStatusType = OrderStatusType.valueOf(newStatusName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid order status: " + newStatusName);
+        }
+
+        if (order.getOrderStatus().getStatusType() == newStatusType) {
             return foodOrderMapper.toDto(order);
         }
 
         // Find the OrderStatus entity by statusName
-        OrderStatus newStatus = orderStatusRepository.findByStatusName(newStatusName)
-                .orElseThrow(() -> new RuntimeException("Order status not found"));
+        OrderStatus newStatus = orderStatusRepository.findByStatusType(newStatusType)
+                .orElseThrow(() -> new RuntimeException("Order status not found for: " + newStatusName));
 
         // Update order status
         order.setOrderStatus(newStatus);

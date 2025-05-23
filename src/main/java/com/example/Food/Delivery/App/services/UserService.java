@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.App.services;
 
+import com.example.Food.Delivery.App.entities.DeliveryDriver;
 import com.example.Food.Delivery.App.repositories.UserRepository;
 import com.example.Food.Delivery.App.dtos.Register.RegisterRequestDto;
 import com.example.Food.Delivery.App.entities.User;
@@ -28,7 +29,8 @@ public class UserService {
         }
 
         User user = new User(
-                request.getFullName(),
+                request.getFirstName(),
+                request.getLastName(),
                 request.getEmail(),
                 request.getUsername(),
                 passwordEncoder.encode(request.getPassword()),
@@ -36,6 +38,16 @@ public class UserService {
         );
 
         user.setPhoneNumber(request.getPhoneNumber());
+
+        if (user.getRole() == UserRole.DRIVER) {
+            DeliveryDriver driver = new DeliveryDriver();
+            driver.setFirstName(request.getFirstName());
+            driver.setLastName(request.getLastName());
+            driver.setEmail(request.getEmail());
+            driver.setPhoneNumber(request.getPhoneNumber());
+            driver.setUser(user);
+            user.setDeliveryDriver(driver);
+        }
         return userRepository.save(user);
     }
 }
