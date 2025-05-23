@@ -7,9 +7,12 @@ import com.example.Food.Delivery.App.dtos.Restaurant.RestaurantResponseDto;
 import com.example.Food.Delivery.App.entities.Address;
 import com.example.Food.Delivery.App.entities.Country;
 import com.example.Food.Delivery.App.entities.Restaurant;
+import com.example.Food.Delivery.App.mappers.AddressMapper;
+import com.example.Food.Delivery.App.mappers.RestaurantMapper;
 import com.example.Food.Delivery.App.repositories.AddressRepository;
 import com.example.Food.Delivery.App.repositories.CountryRepository;
 import com.example.Food.Delivery.App.repositories.RestaurantRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,34 +25,57 @@ public class RestaurantService {
     private final AddressRepository addressRepository;
     private final CountryRepository countryRepository;
 
+    private final RestaurantMapper restaurantMapper;
+    private final AddressMapper addressMapper;
+
     public RestaurantService (
             RestaurantRepository restaurantRepository,
             AddressRepository addressRepository,
-            CountryRepository countryRepository) {
+            CountryRepository countryRepository,
+            RestaurantMapper restaurantMapper,
+            AddressMapper addressMapper
+    ) {
         this.restaurantRepository = restaurantRepository;
         this.addressRepository = addressRepository;
         this.countryRepository = countryRepository;
+        this.restaurantMapper = restaurantMapper;
+        this.addressMapper = addressMapper;
     }
 
 
     public List<RestaurantResponseDto> getAllRestaurants() {
         return restaurantRepository.findAll().stream()
-                .map(this::mapToRestaurantResponseDto)
+                .map(restaurantMapper::toDto)
                 .collect(Collectors.toList());
     }
 
 
     public RestaurantResponseDto createRestaurant(RestaurantRequestDto dto) {
-        // Save new Address in database
-        Address address = mapToAddressEntity(dto.getAddress());
-        address = addressRepository.save(address);
 
-        // Create and save Restaurant
+        Address address;
+
+        if (dto.getAddressId() != null) {
+            address = addressRepository.findById(dto.getAddressId())
+                    .orElseThrow(() -> new EntityNotFoundException("Address not found"));
+        } else if (dto.getAddress() != null) {
+            AddressRequestDto addressDto = dto.getAddress();
+
+            // Get country entity
+            Country country = countryRepository.findById(addressDto.getCountryId())
+                    .orElseThrow(() -> new EntityNotFoundException("Country not found"));
+
+            // Create and save address
+
+            address = addressMapper.toEntity(addressDto, country);
+            addressRepository.save(address);
+        } else {
+            throw new IllegalArgumentException("You must provide either addressId or address details.");
+        }
+
+        // Create and save restaurant
         Restaurant restaurant = new Restaurant(dto.getName(), address);
-        restaurant = restaurantRepository.save(restaurant);
 
-        // Return mapped DTO
-        return mapToRestaurantResponseDto(restaurant);
+        return restaurantMapper.toDto(restaurantRepository.save(restaurant));
     }
 
     public RestaurantResponseDto updateRestaurant(Long id, RestaurantRequestDto dto) {
@@ -88,48 +114,10 @@ public class RestaurantService {
     }
 
 
-    //This method takes an AddressDto and converts it into an Address entity
-    private Address mapToAddressEntity(AddressRequestDto dto) {
-        Address address = new Address();
-        address.setStreet(dto.getStreet());
-        address.setHouseNumber(dto.getHouseNumber());
-        address.setApartmentNumber(dto.getApartmentNumber());
-        address.setCity(dto.getCity());
-        address.setState(dto.getState());
-        address.setZipCode(dto.getZipCode());
-
-        Country country = countryRepository.findById(dto.getCountryId())
-                .orElseThrow(() -> new IllegalArgumentException("Country not found with id: " + dto.getCountryId()));
-        address.setCountry(country);
-
-        return address;
-    }
 
 
-    private RestaurantResponseDto mapToRestaurantResponseDto(Restaurant restaurant) {
-        return new RestaurantResponseDto(
-                restaurant.getId(),
-                restaurant.getName(),
-                mapAddressToDto(restaurant.getAddress())
-        );
-    }
 
-    private AddressResponseDto mapAddressToDto(Address address) {
-        if (address == null) return null;
 
-        String country = (address.getCountry() != null) ? address.getCountry().getCountryName() : null;
-
-        return new AddressResponseDto(
-                address.getId(),
-                address.getStreet(),
-                address.getHouseNumber(),
-                address.getApartmentNumber(),
-                address.getCity(),
-                address.getState(),
-                address.getZipCode(),
-                country
-        );
-    }
 
 
 }

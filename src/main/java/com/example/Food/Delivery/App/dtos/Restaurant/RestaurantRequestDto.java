@@ -9,23 +9,30 @@ public class RestaurantRequestDto {
     @NotBlank
     private String name;
 
-    @Valid
-    @NotNull
+    private Long addressId;
+
     private AddressRequestDto address;
 
-    public RestaurantRequestDto() {}
-
-    public RestaurantRequestDto(String name, AddressRequestDto address) {
+    public RestaurantRequestDto(String name, Long addressId, AddressRequestDto address) {
         this.name = name;
+        this.addressId = addressId;
         this.address = address;
     }
 
-    public String getName() {
+    public @NotBlank String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NotBlank String name) {
         this.name = name;
+    }
+
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
     }
 
     public AddressRequestDto getAddress() {

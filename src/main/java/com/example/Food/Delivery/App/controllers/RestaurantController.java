@@ -29,8 +29,8 @@ public class RestaurantController {
         return restaurantService.getAllRestaurants();
     }
 
-//     2. Admin: Add new restaurant
-    //@Valid annotationRuns validation annotations (e.g., @NotNull, @Size) defined in the DTO.
+    //2. Admin: Add new restaurant
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RestaurantResponseDto> createRestaurant(@RequestBody @Valid RestaurantRequestDto dto) {
@@ -38,7 +38,7 @@ public class RestaurantController {
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-//    2. Admin: Update existing restaurant
+    //3. Admin: Update existing restaurant
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RestaurantResponseDto> updateRestaurant(
