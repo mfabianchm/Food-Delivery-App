@@ -14,9 +14,6 @@ public class OrderStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /*@Column(nullable = false, unique = true)
-    private String statusName;*/
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
     private OrderStatusType statusType;

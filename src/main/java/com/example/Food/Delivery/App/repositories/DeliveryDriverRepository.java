@@ -8,7 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface DeliveryDriverRepository extends JpaRepository<DeliveryDriver, Long> {
-    Optional<DeliveryDriver> findByEmail(String email);
     Optional<DeliveryDriver> findByUser(User user);
-    Optional<DeliveryDriver> findByFirstName(User user);
 }
